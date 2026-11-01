@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
 import subprocess
@@ -39,6 +40,18 @@ def run(command: list[str], cwd: Path, *, output: Path | None = None) -> str:
     return result.stdout
 
 
+def canonical_snapshot(snapshot: Path, revision: str, destination: Path) -> dict[str, str]:
+    """Exercise the actual maintained source boundary against the candidate tree."""
+    spec = importlib.util.spec_from_file_location("matching_audit_runner", ROOT / "audit/run.py")
+    audit_runner = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(audit_runner)
+    destination.mkdir()
+    hashes = audit_runner.source_snapshot(snapshot, revision, destination)
+    if any(path.startswith("pilot/") for path in hashes):
+        raise RuntimeError("experimental matching source entered the canonical audit stage")
+    return hashes
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--revision", required=True)
@@ -62,6 +75,9 @@ def main() -> None:
         run(["git", "checkout", "--detach", args.revision], snapshot)
         if run(["git", "rev-parse", "HEAD"], snapshot).strip() != args.revision:
             raise RuntimeError("fresh checkout resolved a different candidate")
+        canonical_hashes = canonical_snapshot(
+            snapshot, args.revision, Path(temporary) / "canonical-source",
+        )
         maintained = (
             "lean-toolchain", "lakefile.toml", "audit/Check.lean", "audit/ExportPublic.lean",
         )
@@ -106,6 +122,7 @@ def main() -> None:
         report = {
             "profile": "matching-pilot-development-v1", "development_only": True,
             "revision": args.revision, "source_sha256": sources,
+            "canonical_source_snapshot_sha256": canonical_hashes,
             "manifest_sha256": digest(manifest), "export_sha256": digest(export),
             "checker_binary_sha256": digest(checker),
             "exporter_binary_sha256": digest(exporter),

@@ -308,7 +308,8 @@ def source_snapshot(
             continue
         name = record.decode("utf-8")
         if name.endswith(".lean") and not (
-            name == "TNDLib.lean" or name.startswith(("TNDLib/", "tasks/", "tests/", "audit/"))
+            name == "TNDLib.lean"
+            or name.startswith(("TNDLib/", "tasks/", "tests/", "audit/", "pilot/TNDLib/Matching/"))
         ):
             raise ValueError(f"unapproved Lean source outside library and auxiliary trees: {name}")
     entries = (

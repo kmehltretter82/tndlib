@@ -19,7 +19,7 @@ open TNDLib.Matching
 
 def commonPreferences (n : Nat) : Preferences n :=
   ⟨fun _ receiver => receiver, fun _ proposer => proposer,
-    fun _ equality => equality, fun _ equality => equality⟩
+    fun _ {_ _} equality => equality, fun _ {_ _} equality => equality⟩
 
 def result := stableMatch (commonPreferences 3)
 
