@@ -813,7 +813,9 @@ class DriverBoundaryTests(unittest.TestCase):
                 policy, policy_bytes, inventory, exports_bytes, registry = (
                     runner._load_validated_maintainer_manifests(root, head)
                 )
-            self.assertEqual(policy["schema_version"], 1)
+            # This is the source-admission policy, not certification.json;
+            # its maintained schema has source_files/tasks and no version key.
+            self.assertEqual(policy, json.loads(blobs["audit/admission/policy.json"]))
             self.assertEqual(policy_bytes, blobs["audit/admission/policy.json"])
             self.assertEqual(exports_bytes, blobs["audit/exports.json"])
             self.assertTrue(inventory["expected_exports"])

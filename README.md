@@ -4,6 +4,10 @@
 
 **Status:** early development. The initial corpus builds, but the independent verifier and end-to-end contribution workflow are still being validated. Do not treat an unverified build or a GitHub label as proof of certification.
 
+The [2026-11-01 baseline report](docs/BASELINE.md) records exact local snapshots,
+fresh-checkout results, and the separation between production's disabled
+certification profile and deliberately activated test-repository flags.
+
 ## Get started
 
 Install [Lean with elan](https://lean-lang.org/install/), then from this repository run:
