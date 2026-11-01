@@ -27,6 +27,11 @@ For the proposed default policy, audited declarations may depend on `propext` an
 Lean's bundled core contains classical facilities. A successful build alone therefore does not establish this policy. See [Lean's account of axioms and computation](https://lean-lang.org/theorem_proving_in_lean4/Axioms-and-Computation/) and the verifier documentation as it becomes available.
 
 The [foundation evaluation](docs/FOUNDATION.md) records the initial corpus, local checks, and outstanding release gates.
+The separate [stable-matching pilot](audit/matching/README.md) adds an executable
+constructor and an arbitrary-size stability proof. Build it explicitly with
+`lake build TNDMatchingPilot` and import `TNDLib.Matching.Pilot`. Its sources
+remain outside the approved production inventory while full source admission
+is reviewed; it is development mathematics, not a certified release.
 The [release procedure](docs/RELEASING.md) records the future freeze, evidence,
 immutable-pin, publication, and withdrawal steps; current policy explicitly
 forbids carrying them out as a certified release.
