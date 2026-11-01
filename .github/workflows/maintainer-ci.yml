@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 1
+          fetch-depth: 0
           fetch-tags: false
           persist-credentials: false
 
@@ -96,7 +96,7 @@ jobs:
           for source in tests/matching/*.lean; do
             lake env lean "$source"
           done
-          python3 audit/matching/test_admission.py
+          python3 audit/matching/test_admission.py --lean "$TND_LEAN_ROOT/bin/lean"
           python3 tests/matching/check_source.py --revision "$candidate"
           python3 tests/matching/check_downstream.py --revision "$candidate"
 
