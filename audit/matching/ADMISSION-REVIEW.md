@@ -1,8 +1,8 @@
 # Matching source-admission review
 
-Status: development investigation and proposed patch design, 2026-11-01.
-No production parser, production admission policy, certification flag, or source
-manifest is changed by this document or its diagnostic probe. The pilot is now
+Status: a separate development profile is implemented, 2026-11-01.
+The production parser, production admission policy, certification flags, and
+production source inventory remain unchanged. The pilot is now
 isolated under `pilot/` as the explicit `TNDMatchingPilot` Lake target. Its
 logical modules retain the `TNDLib.Matching` namespace. The original production
 root and inventory continue to cover only the existing six modules.
@@ -10,7 +10,8 @@ root and inventory continue to cover only the existing six modules.
 ## Observed boundary
 
 The new matching modules compile and their proof objects can be independently
-replayed, but they do not yet pass the production source-admission path.
+replayed. The separate development profile below accepts their source, while
+the unchanged production source-admission path continues to reject them.
 These are separate facts: replay validates the elaborated declarations, while
 source admission constrains the elaboration features that may interpret source.
 
@@ -228,18 +229,62 @@ all existing admission fixtures to demonstrate that the expanded profile does
 not accidentally admit previously rejected tactics, attributes, callbacks, or
 artifacts.
 
-## Implementation order and acceptance
+## Implemented development profile
 
-1. Preserve this diagnostic evidence and the source/refinement diff.
-2. Implement and review a separate development parser/policy profile with the
-   narrow validators and DAG check; keep the production profile unchanged.
-3. Add the positive/negative matrix and run it against exact snapshots with
-   the existing resource wrapper.
-4. Independently review the delta, then make any proposed production adoption
-   explicit. Do not change certification flags based on the prototype.
-5. Only claim the full matching source is admitted after a complete exact-byte
-   run through the adopted path, followed by isolated build/export/replay of
-   the same snapshot and all declaration/axiom/statement checks.
+`audit/matching/Main.lean` implements the narrow profile described above. Its
+accepted report identifies `profile: matching-plain-term-v1`,
+`scope: matching-pilot-source-only`, and `development_only: true`. It parses
+only listed source files and never imports candidate headers. The staging
+boundary and import-DAG checks belong to the separate trusted source driver.
 
-At this checkpoint the parser extension is a concrete design, not an
-implemented or validated source-admission boundary.
+`source-policy.json` lists the thirteen pilot modules and existing constructive
+`TNDLib/Finite.lean` leaf. Every top-level declaration and namespace block is
+explicit. `StableMatch.lean` needs two sibling namespace blocks; the parser
+checks their exact sequence and forbids nested, repeated, or unlisted blocks.
+All data declarations have both human-readable field/constructor inventories
+and an exact canonical AST shape. The latter pins their reviewed parameter,
+field, and result-family signatures instead of admitting a general new class
+of recursive or indexed declarations.
+
+Local/proof/named-argument binders accept ordinary unqualified Unicode names.
+A positive `(α := Nat)` fixture exposed that `Char.isAlphanum` is ASCII-only;
+using that declaration-name rule for local binders rejected valid ordinary
+Lean arguments. This local-name correction preserves the global declaration
+and field inventories and still subjects all identifiers to the root-qualified
+and reflective/effectful prefix bans.
+
+The normal CLI accepts an explicit maintained policy and root:
+
+```sh
+lake env lean --run audit/matching/Main.lean \
+  audit/matching/source-policy.json .
+```
+
+A maintenance-only `--describe ROOT PATHS...` mode emits a distinct
+`description-only` report for reviewing proposed policy metadata. Normal
+admission never describes candidate bytes to create or update its own policy.
+The fixture harness describes its fixed trusted fixture once, then changes
+only candidate text while retaining that same policy.
+
+Run the actual-source and hostile grammar fixtures with:
+
+```sh
+python3 audit/matching/test_admission.py \
+  --output audit/matching/admission-fixture-results.json
+```
+
+The receipt is written only after the full suite succeeds and binds the
+production parser, development parser, maintained source policy, and fixture
+harness digests. The suite includes an unreviewed candidate module containing
+an initializer that would write a sentinel; the file must remain inert. The
+harness verifies ordinary positive syntax and hostile command/default/deriving,
+instance, import, reflection, tactic, inventory, malformed-input, and depth
+cases. It is a development grammar regression test, not acceptance of the
+production sandbox/resource boundary.
+
+Before any production adoption, independently review the delta, reconcile the
+whole language/semantic threat model, retain all applicable original negative
+controls, and exercise exact immutable bytes through staging, isolated build,
+export, independent replay, and source-to-statement checks. Passing these
+fixtures does not prove semantic completeness or authorize changing either
+production certification flag.

@@ -4,9 +4,6 @@ defaultTargets = ["TNDLib"]
 
 [[lean_lib]]
 name = "TNDLib"
-roots = []
-globs = ["TNDLib", "TNDLib.Logic", "TNDLib.Predicate", "TNDLib.Nat",
-  "TNDLib.List", "TNDLib.Finite", "TNDLib.Algebra"]
 
 # Explicit development target; not part of the approved TNDLib source inventory.
 [[lean_lib]]

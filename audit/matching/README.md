@@ -7,6 +7,11 @@ It is not imported by the approved `TNDLib.lean` root and is not part of the
 existing production admission/export inventory. This separation keeps the
 existing source guard effective while the new source grammar is reviewed.
 
+The pilot target is declared after the original library: pinned Lake 4.35
+resolves overlapping buildable modules from the last matching library. The
+original library keeps its normal root behavior so future approved task
+promotions can add modules; it is not frozen to a hard-coded list of six files.
+
 The mathematical endpoint is:
 
 ```text
@@ -29,9 +34,16 @@ From the library root:
 lake build TNDLib TNDMatchingPilot
 lake env lean tests/matching/StableMatch.lean
 python3 tests/matching/check_proposal.py
+python3 audit/matching/test_admission.py
+python3 tests/matching/check_source.py --revision FULL_40_CHARACTER_COMMIT_SHA
 python3 tests/matching/check_pilot.py --revision FULL_40_CHARACTER_COMMIT_SHA
 python3 tests/matching/check_downstream.py --revision FULL_40_CHARACTER_COMMIT_SHA
 ```
+
+The maintainer regression workflow contains these pilot build, fixture, source,
+and downstream checks. It retains its original same-repository/main guards and
+read-only permissions. The new workflow steps have been exercised locally as
+commands; no hosted run of this new candidate has been performed.
 
 The exact-revision scripts require a committed candidate. They inspect its
 production policy and reject validation-only activated flags. The downstream
@@ -56,7 +68,7 @@ approved challenge statement. The separately reviewed
 correspondence. A proof-task comparison against an independently approved
 challenge is a different operation.
 
-## Source-admission limitation
+## Development source admission and production boundary
 
 The unchanged production parser admits the seven-declaration plain-term
 `Proposal` module in a supplemental fixed-inventory snapshot. The full pilot
@@ -64,16 +76,32 @@ uses a richer, still pure mathematical syntax, including explicit data
 structures and inductive result types. Its direct admission probe is rejected
 at `Lean.Parser.Command.structure`.
 
-The full replay report records that rejection, keeps `development_only: true`,
-and explicitly sets `production_certification: false`. It does not substitute
-the seven-declaration success for full-pilot source admission. No production
-flag, grammar allowlist, or approved production source inventory has been
-expanded by these scripts.
+The separate development profile in `Main.lean` now admits all 14 actual source
+files, including the finite-enumeration dependency. It fixes the exact data
+declarations, namespace sequences, headers, and declaration inventory. Its
+fixture harness passed 13 positive and 91 hostile cases, including an
+unknown-import initializer that must remain inert.
 
-[ADMISSION-REVIEW.md](ADMISSION-REVIEW.md) inventories the observed syntax,
-proposes a restricted development profile and exact local import-DAG policy,
-and lists the negative cases that must pass before the full source-admission
-gate can be considered satisfied. That gate remains open.
+`check_source.py` reads ordinary bounded Git blobs from an exact commit using
+maintained policy, validates an acyclic import closure with `Init` as the only
+external module, and stages a fresh project. Exact copies of the maintained
+parser/policy/manifest are used, the admitted source is compiled and exported,
+and the independent checker replays all matching declarations. Source hashes
+are checked again afterward. Unsafe modes, unlisted files, and invalid sizes
+are rejected before compilation. This is host-local development evidence,
+not an immutable mount or filesystem/network isolation claim.
+
+The original production parser still rejects the richer source. The proof-only
+replay script records that as `production_source_admission`; the separate
+development source report records its own accepted profile. Both keep
+`development_only: true` and `production_certification: false`. The full pilot's
+development acceptance is not inferred from the seven-declaration subset.
+No production flag, parser allowlist, or approved production source inventory
+has been expanded by these scripts.
+
+[ADMISSION-REVIEW.md](ADMISSION-REVIEW.md) documents the implemented restricted
+development profile, observed syntax, negative controls, and remaining limits.
+Production integration and native-runner certification remain separate gates.
 
 ## Evidence files
 

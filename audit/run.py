@@ -46,9 +46,6 @@ PUBLISHED_PACKAGE = {
     "lakefile.toml": (
         b'name = "tndlib"\nversion = "0.1.0"\ndefaultTargets = ["TNDLib"]\n'
         b'\n[[lean_lib]]\nname = "TNDLib"\n'
-        b'roots = []\n'
-        b'globs = ["TNDLib", "TNDLib.Logic", "TNDLib.Predicate", "TNDLib.Nat",\n'
-        b'  "TNDLib.List", "TNDLib.Finite", "TNDLib.Algebra"]\n'
         b'\n# Explicit development target; not part of the approved TNDLib source inventory.\n'
         b'[[lean_lib]]\nname = "TNDMatchingPilot"\nsrcDir = "pilot"\n'
         b'roots = ["TNDLib.Matching"]\nglobs = ["TNDLib.Matching.+"]\n'

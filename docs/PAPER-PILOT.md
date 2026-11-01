@@ -1,8 +1,12 @@
 # Paper pilot: constructive finite stable matching
 
-Status: proposed first mathematical case study, 2026-11-01. This is a scoped
-formalization plan, not a completed result or a certification claim. The active
-workspace continuation plan is [PLAN.md](../../../PLAN.md).
+Status: the selected arbitrary-size stable-existence theorem and executable
+constructor are implemented and independently replayed, 2026-11-01. A separate
+restricted development profile admits the complete source and has passed its
+positive/hostile fixture matrix. Final exact-candidate evidence is in the
+review packet and workspace manifest. This is not a
+production certification claim. See the [review packet](MATCHING-REVIEW.md)
+for exact candidate evidence and [PLAN.md](../../../PLAN.md) for the workspace plan.
 
 ## Why this pilot
 
@@ -64,8 +68,9 @@ stableMatch (preferences : Preferences n) :
   { matching : PerfectMatching n // Stable preferences matching }
 ```
 
-This is a specification sketch, not checked Lean code. Choose concrete names
-and representations during the prototype. Review the following independently:
+The implemented checked endpoint is `TNDLib.Matching.stableMatch` in
+`pilot/TNDLib/Matching/StableMatch.lean`; the sketch above omits namespaces and
+implicit parameters. Review the following independently:
 
 - The input model includes all finite strict complete profiles on equal-sized
   sets; it does not hide an existence or correctness assumption.

@@ -41,4 +41,27 @@ theorem receiverAtRank_sound (preferences : Preferences n) (state : State n)
       (p := fun receiver => decide
         ((preferences.proposerRank proposer receiver).val = state.nextRank proposer)) found)
 
+/-- Every offered receiver enters the tried prefix, whether it accepts or rejects. -/
+theorem offeredReceiver_tried (preferences : Preferences n) (state : State n)
+    (proposer receiver : Fin n)
+    (offeredRank : (preferences.proposerRank proposer receiver).val = state.nextRank proposer) :
+    (preferences.proposerRank proposer receiver).val <
+      (advance preferences state proposer receiver).nextRank proposer :=
+  Eq.mpr
+    (congrArg (fun counter => (preferences.proposerRank proposer receiver).val < counter)
+      (ite_eq_left rfl))
+    (Nat.lt_succ_of_le (Nat.le_of_eq offeredRank))
+
+/-- Lookup cannot return a receiver in the proposer's previously tried prefix. -/
+theorem nextReceiver_not_tried (preferences : Preferences n) (state : State n)
+    (proposer : Fin n) {receiver : Fin n}
+    (found : receiverAtRank preferences state proposer = some receiver)
+    (previous : Fin n)
+    (tried : (preferences.proposerRank proposer previous).val < state.nextRank proposer) :
+    previous ≠ receiver :=
+  fun same =>
+    Nat.ne_of_lt tried
+      ((congrArg (fun chosen => (preferences.proposerRank proposer chosen).val) same).trans
+        (receiverAtRank_sound preferences state proposer found))
+
 end TNDLib.Matching.Algorithm

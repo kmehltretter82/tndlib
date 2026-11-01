@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fresh-checkout mathematical replay of an exact matching-pilot commit.
 
-The report explicitly retains the unsupported full-source admission boundary.
+The report explicitly retains the unsupported production-admission boundary.
 It is development evidence, never a production certification artifact.
 """
 
@@ -128,14 +128,14 @@ def main() -> None:
             "exporter_binary_sha256": digest(exporter),
             "lean_test_files": [str(path.relative_to(snapshot)) for path in tests],
             "proposal_source_admission": proposal_admission,
-            "full_source_admission": full_admission,
+            "production_source_admission": full_admission,
             "production_certification": False, "proof_objects": checked,
         }
         (output / "pilot-replay.json").write_text(json.dumps(report, indent=2) + "\n")
         print(json.dumps({
             "status": "development-pilot-proof-replay-passed", "revision": args.revision,
             "declarations": len(checked["declarations"]),
-            "full_source_admitted": False, "report": str(output / "pilot-replay.json"),
+            "production_source_admitted": False, "report": str(output / "pilot-replay.json"),
         }))
 
 

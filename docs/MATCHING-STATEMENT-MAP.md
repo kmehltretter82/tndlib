@@ -207,6 +207,9 @@ the intended source-facing domain and blocking predicate:
 | Finite rankings cover every rank | `TNDLib.Matching.surjectiveOfInjective` |
 | Executable finite inverse | `TNDLib.Matching.inverseRank` |
 | Single offer preserves held-rank bounds | `TNDLib.Matching.Proposal.offer_preserves_rank` |
+| Offered receiver enters the tried prefix | `TNDLib.Matching.Algorithm.offeredReceiver_tried` |
+| Next lookup excludes every previously tried receiver | `TNDLib.Matching.Algorithm.nextReceiver_not_tried` |
+| Tried prefixes never shrink | `TNDLib.Matching.Algorithm.advance_nextRank_le` |
 | Consistent assignments preserved | `TNDLib.Matching.Algorithm.consistent_advance` |
 | Assigned partners lie below tried-rank cursors | `TNDLib.Matching.Algorithm.assignedBelow_advance` |
 | Receiver domination for already-tried ranks | `TNDLib.Matching.Algorithm.history_advance` |
@@ -228,6 +231,11 @@ history, and assigned-pair bounds. `runFuel_finishes` inducts over the actual
 interpreter's finite fuel using its increasing bounded proposal count;
 `run_finishes` instantiates the initial state and `n * n + 1` budget.
 
+The no-repeat argument uses the three explicit prefix lemmas above: an offer
+puts its receiver below the advanced cursor, all cursors are monotone, and a
+later lookup cannot return any receiver below its current cursor. This is a
+local transition argument; no separate trace-equivalence theorem is claimed.
+
 The public constructor branches on the actual computed `Outcome`. Its finished
 branch obtains data through executable searches in `chosenReceiver` and
 `inverseRank`. Uses of the existential termination theorem only establish
@@ -248,8 +256,16 @@ The full pilot uses structures, named decision evidence, inductive state/outcome
 multiple imports, and other syntax outside the current source-admission
 profile. The isolated seven-declaration `Proposal` module has been exercised
 through a supplemental maintained parser specification and independent replay;
-that restricted result does not admit or certify the entire pilot. Full-pilot
-proof-object audit evidence must be recorded separately when available.
+that restricted result does not admit or certify the entire pilot. Candidate
+`286cdc677a418f994c4814d9492ebdd3726700e5` subsequently passed fresh-checkout
+independent replay of all 223 exported matching declarations, with only the
+allowed axioms; the exact evidence and its library-self-comparison scope are
+recorded in the [review packet](MATCHING-REVIEW.md). Subsequently, the separate
+restricted development source profile admitted all 14 actual sources and passed
+13 positive and 91 hostile fixtures. Its exact-revision driver also completed
+admission, same-byte compilation/export, and replay. These results satisfy the
+local pilot source gate while leaving production adoption and native isolation
+as separate decisions and validation work.
 
 This establishes a Lean proof of the selected strict-complete finite
 stable-existence result in an explicit indexed presentation. It does not

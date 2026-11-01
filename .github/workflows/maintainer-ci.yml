@@ -85,6 +85,21 @@ jobs:
             --checker audit/.lake/build/bin/tnd-check \
             --exporter audit/.lake/build/bin/tnd-export
 
+      - name: Verify the constructive matching development pilot
+        shell: bash
+        env:
+          LEAN_NUM_THREADS: '2'
+        run: |
+          set -euo pipefail
+          candidate="$(git rev-parse HEAD)"
+          lake build TNDMatchingPilot
+          for source in tests/matching/*.lean; do
+            lake env lean "$source"
+          done
+          python3 audit/matching/test_admission.py
+          python3 tests/matching/check_source.py --revision "$candidate"
+          python3 tests/matching/check_downstream.py --revision "$candidate"
+
       - name: Run Python regression, syntax, and style checks
         run: |
           set -euo pipefail
