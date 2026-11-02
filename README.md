@@ -56,9 +56,15 @@ the runner's architecture. That fixes the installed bytes; it is a supply-chain
 control, not certification. The production release gate separately requires the
 native-Linux boundary evidence described in the foundation report.
 
-## Contributing
+## Contributing and Agent Missions
 
-The project is preparing a [Choir](https://github.com/Weber-GeoML/Choir) workflow for approved tasks and independently checked proof submissions. Humans and contributors using their own agents are welcome. The [draft contributor guide](CONTRIBUTING.md) describes the intended workflow; task publication, claiming, and merge checks are not yet ready for a public pilot.
+TND provides a [Choir](https://github.com/Weber-GeoML/Choir)-based contributor loop (`discover → claim → prove → submit → verify → merge`) for reviewed German/DACH mathematical and computer-science paper missions:
+- **[Agent Entry Guide (`docs/AGENT-GUIDE.md`)](docs/AGENT-GUIDE.md)** — Exact setup, discovery, lease claiming/renewal/release, local admission & kernel verification, PR submission, and failure recovery.
+- **[Contributor Guide (`CONTRIBUTING.md`)](CONTRIBUTING.md)** — Full Choir worker CLI instructions and submission rules.
+- **[Starter & Mission Task Queue (`docs/STARTER-QUEUE.md`)](docs/STARTER-QUEUE.md)** — Ready proof tasks across the active missions (`H01` Cantor 1891/92, `L06` Lorenzen 1951, `M01` McConnell–Mehlhorn–Näher–Schweitzer 2011 §9.5) and foundation starter task (`map_exists`).
+- **[Screened Paper Backlog (`docs/PAPER-BACKLOG.md`)](docs/PAPER-BACKLOG.md)** and **[Statement Maps (`docs/PACKAGES-STATEMENT-MAPS.md`)](docs/PACKAGES-STATEMENT-MAPS.md)** — 20 screened German/DACH paper records (`audit/papers.json`) and 8 source-mapped statement packages (`audit/missions.json`).
+
+TND distinguishes three verification states: `source-published` (reviewed definitions and open `sorry` task challenges in git), `proved-development` (verified by the isolated source-admission parser and independent kernel proof-object checker while `.choir/certification.json` remains fail-closed), and `production-certified` (native Linux quota-enforced release evidence).
 
 ## License
 

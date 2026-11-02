@@ -1,9 +1,13 @@
 # Stable-matching pilot review packet
 
-Status: mathematical development candidate and separate complete-source
-development profile verified; final exact-candidate checks are recorded in the
-workspace review manifest. No publication or production certification is
-authorized by this packet.
+Status: mathematical development candidate and complete-source development
+profile verified (`4eb427483923034000a9825cfd41f5d6a45c6861`, with CI follow-up
+`3dbcf3013a8350e33c5e9950e0b01539cfc2915d` passing `Maintainer Regression` run
+`41356432624`). Proof status is `proved-development` (verified by the isolated
+source-admission parser and independent kernel proof-object checker while
+`.choir/certification.json` remains fail-closed `false`/`false`/`null`, as
+distinct from `source-published` unproved source and `production-certified`
+native Linux quota-enforced release evidence).
 
 ## Mathematical result
 
@@ -39,14 +43,16 @@ incomplete preferences, and full-paper coverage remain outside this milestone.
 - Mathematical implementation: `8403021115797242ddbf200a237fcefdbcf2d959`.
 - Verified packaging/harness candidate:
   `286cdc677a418f994c4814d9492ebdd3726700e5`.
-- The final local candidate additionally includes complete-source development
-  admission, package-growth compatibility, two explicit no-repeat prefix
-  lemmas, regression coverage, and the benchmark. Its full SHA and exact-run
-  report hashes are recorded in the workspace `REVIEW-MANIFEST.md`; the older
-  candidate identities above do not identify those later changes.
+- Published development commit `4eb427483923034000a9825cfd41f5d6a45c6861` includes
+  complete-source development admission, package-growth compatibility, two
+  explicit no-repeat prefix lemmas, regression coverage, and the benchmark
+  (followed by CI checkout-depth fix `3dbcf3013a8350e33c5e9950e0b01539cfc2915d`,
+  verified in public run `41356432624`).
 
-All are local commits. The implementation is an explicit `TNDMatchingPilot`
-Lake target under `pilot/`; downstream users import `TNDLib.Matching.Pilot`.
+The implementation is an explicit `TNDMatchingPilot` Lake target under `pilot/`
+configured via `LAKE_CONFIG_ENV=tnd-pilot` (see `lakefile.toml` and
+`tests/check_downstream.py`); downstream users of the pilot target import
+`TNDLib.Matching.Pilot`.
 The original `TNDLib.lean` root and its approved production source/export
 inventories are unchanged. Exact package policy permits only the reviewed
 configuration, and the real canonical source-snapshot routine excludes pilot
@@ -85,8 +91,9 @@ files and stages a minimal original-library Lake project.
   with production disabled; these results do not resolve that gap.
 
 Reproduce exact-candidate evidence with the commands in the
-[verification guide](../audit/matching/README.md). Generated reports are under
-`audit/output/matching/`. The full replay report for `286cdc6` has SHA-256
+[verification guide](../audit/matching/README.md), writing output to a caller-chosen
+temporary directory (for example `/tmp/tnd-matching-report.json`). The full
+replay report for `286cdc6` has SHA-256
 `e3ff0c0526bd90b3d13afd733b0c69b65a32b86f9e77837c738d78c65a5263a4`.
 Regenerated reports or new candidates need their own recorded hashes.
 

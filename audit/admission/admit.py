@@ -105,8 +105,29 @@ def policy_for(
     for entry in specs:
         if entry["module_name"].replace(".", "/") + ".lean" != entry["path"]:
             raise ValueError("module path does not match trusted policy")
-        if entry["path"] != "TNDLib.lean" and entry["imports"] != ["Init"]:
-            raise ValueError("prototype module imports must be exactly Init")
+        if entry["path"] != "TNDLib.lean":
+            imports = entry.get("imports")
+            if (
+                not isinstance(imports, list)
+                or not imports
+                or len(set(imports)) != len(imports)
+                or not all(imp == "Init" or imp in modules for imp in imports)
+            ):
+                raise ValueError(
+                    "library module imports must be within Init and approved TNDLib DAG"
+                )
+    # Verify that library module imports form an acyclic DAG.
+    import_map = {
+        entry["module_name"]: [imp for imp in entry["imports"] if imp != "Init"]
+        for entry in specs
+        if entry["path"] != "TNDLib.lean"
+    }
+    for mod, direct_imports in import_map.items():
+        frontier = set(direct_imports)
+        for _ in range(len(import_map)):
+            frontier |= {nxt for cur in list(frontier) for nxt in import_map.get(cur, [])}
+        if mod in frontier:
+            raise ValueError(f"library module import cycle detected involving {mod}")
     if role not in {"challenge", "solution"}:
         raise ValueError("unknown task admission role")
     task = None

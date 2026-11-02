@@ -42,8 +42,9 @@ python3 tests/matching/check_downstream.py --revision FULL_40_CHARACTER_COMMIT_S
 
 The maintainer regression workflow contains these pilot build, fixture, source,
 and downstream checks. It retains its original same-repository/main guards and
-read-only permissions. The new workflow steps have been exercised locally as
-commands; no hosted run of this new candidate has been performed.
+read-only permissions, and passed public GitHub Actions run `41356432624` on
+commit `3dbcf3013a8350e33c5e9950e0b01539cfc2915d` (following initial publication
+commit `4eb427483923034000a9825cfd41f5d6a45c6861`).
 
 The exact-revision scripts require a committed candidate. They inspect its
 production policy and reject validation-only activated flags. The downstream
@@ -105,8 +106,9 @@ Production integration and native-runner certification remain separate gates.
 
 ## Evidence files
 
-Generated reports and large exports live under ignored `audit/output/matching/`.
-Their source/manifest/binary hashes and candidate SHA bind each report to its
-actual inputs. These are local macOS development runs. They do not establish
-native-Linux isolation, production resource-boundary validation, or publication
-approval. Final review must bind the reports to the proposed candidate commit.
+Generated reports and large exports can be written to any caller-selected
+temporary directory (defaulting to an ignored local output path during manual
+runs). Their source/manifest/binary hashes and candidate SHA bind each report to
+its actual inputs. These development runs establish `proved-development` status;
+they do not establish `production-certified` native-Linux quota isolation or
+immutable release evidence.

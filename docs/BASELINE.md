@@ -6,10 +6,13 @@ The continuation plan is now being executed locally.
 
 ## Frozen snapshots
 
-| Tree | Exact baseline commit | Publication state checked on 2026-11-01 |
+| Tree | Exact commit | Publication and CI state |
 | --- | --- | --- |
-| Library, `.work/tndlib` | `a76c3fc5516e263229a41eb597e3a7ce9f870c8a` | Local baseline only; public `kmehltretter82/tndlib` has no branch refs. |
-| Platform, `.work/platform-remote` | `5c796a47fc4dec9d73b5387b48cb28a50a9bd705` | Local baseline only; public `kmehltretter82/und` has no branch refs. |
+| Library initial baseline (`kmehltretter82/tndlib`) | `a76c3fc5516e263229a41eb597e3a7ce9f870c8a` | Initial pre-pilot baseline snapshot. |
+| Library pilot & admission commit (`kmehltretter82/tndlib`) | `4eb427483923034000a9825cfd41f5d6a45c6861` | Published to `kmehltretter82/tndlib:main`; triggered initial push runs `41355670225` (`Maintainer Regression`, failed on shallow `fetch-depth: 1` history check) and `41355670224` (`Audit Main`, fails closed while `.choir/certification.json` is disabled). |
+| Library CI follow-up (`kmehltretter82/tndlib`) | `3dbcf3013a8350e33c5e9950e0b01539cfc2915d` | Published to `kmehltretter82/tndlib:main` (`fetch-depth: 0` in `maintainer-ci.yml`); passed public `Maintainer Regression` run `41356432624`. |
+| Library structural test alignment | `a8a92ecf13427d42fc7a04ec6d02ab8836ccf6c4` | Aligns `tests/test_choir_integration.py` `fetch-depth: 0` assertion with `3dbcf3013a8350e33c5e9950e0b01539cfc2915d`. |
+| Platform baseline (`kmehltretter82/und`) | `5c796a47fc4dec9d73b5387b48cb28a50a9bd705` | Initial platform repository baseline. |
 
 These commits capture the source before new mathematical pilot modules. Later
 working-tree edits are not retroactively part of this baseline. Reproduction
@@ -116,11 +119,13 @@ updates, and lists merge App 5555437 as its sole always-bypass actor.
 The merge-lane enable variable is absent.
 
 The App's authentication/wrong-head rejection worked in live run 41345526521.
-Run 41345577332 failed during bypass-list verification. The owner API confirms
-the expected list; the low-privilege App's actual response was not logged.
-GitHub's documented visibility restriction is the likely cause. No successful
-App-based merge has been established. This operational gap does not block
-local mathematical development.
+Run 41345577332 failed during bypass-list verification because GitHub omits
+`bypass_actors` on ruleset queries made by a GitHub App installation token with
+read-only repository administration permission (`Administration: read`), while
+still returning `current_user_can_bypass: "always"` for the Merge App token.
+`orchestrator/tnd_verification.py` and `orchestrator/config_audit.py` now
+separate owner-side unredacted ruleset auditing (`choir orch audit-merge-config`)
+from runtime Merge App self-bypass verification (`current_user_can_bypass == "always"`).
 
 ## Selected frozen-input hashes
 

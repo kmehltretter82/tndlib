@@ -1,12 +1,14 @@
 # Paper pilot: constructive finite stable matching
 
 Status: the selected arbitrary-size stable-existence theorem and executable
-constructor are implemented and independently replayed, 2026-11-01. A separate
+constructor are implemented and independently replayed (`proved-development` at
+`4eb427483923034000a9825cfd41f5d6a45c6861`, CI verified at
+`3dbcf3013a8350e33c5e9950e0b01539cfc2915d` in run `41356432624`). A separate
 restricted development profile admits the complete source and has passed its
-positive/hostile fixture matrix. Final exact-candidate evidence is in the
-review packet and workspace manifest. This is not a
-production certification claim. See the [review packet](MATCHING-REVIEW.md)
-for exact candidate evidence and [PLAN.md](../../../PLAN.md) for the workspace plan.
+positive/hostile fixture matrix. This is a development-checked proof
+(`proved-development`), not a `production-certified` claim. See the
+[review packet](MATCHING-REVIEW.md) for exact candidate evidence and
+[`docs/FOUNDATION.md`](FOUNDATION.md) for the library architecture.
 
 ## Why this pilot
 
